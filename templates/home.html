@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    books
+{% endblock %}
+
+{% block body %}
+  <h1>welcome to books</h1>
+  <p>thanks for signing up!</p>
+
+  {% for user in users %}
+    <p>{{ user.username }}</p>
+    <p>{{ user.password }}</p>
+  {% endfor %}
+
+  <a href="{{ url_for('index') }}">back to home</a>
+
+{% endblock %}

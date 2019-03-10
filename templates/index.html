@@ -5,33 +5,14 @@
 {% endblock %}
 
 {% block body %}
-  <h1>welcome to books</h1>
+  <div class="container mt-5 mx-auto">
+    <h1 style="text-align: center; ">welcome to books</h1>
 
-  {% for user in users %}
-    <p>{{ user.username }}</p>
-    <p>{{ user.password }}</p>
-  {% endfor %}
-  <br>
-  <br>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
 
-  <h3>please sign in</h3>
-
-  <form action="{{ url_for('signin') }}" method="post">
-
-    <div class="form-group">
-      <input class="form-control" name="username" placeholder="enter your username">
-    </div>
-
-    <div class="form-group">
-      <input class="form-control" type="password" name="password" placeholder="enter your password">
-    </div>
-
-    <div class="form-group">
-      <button class="btn btn-primary">sign in</button>
-    </div>
-
-  </form>
-
-  <a href="{{ url_for('signup') }}">not a member? sign up here</a>
 
 {% endblock %}

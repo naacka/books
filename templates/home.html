@@ -5,14 +5,9 @@
 {% endblock %}
 
 {% block body %}
-  <h1>welcome to books</h1>
-  <p>thanks for signing up!</p>
+  <h1>welcome to books {{ message }}!</h1>
 
-  {% for user in users %}
-    <p>{{ user.username }}</p>
-    <p>{{ user.password }}</p>
-  {% endfor %}
-
-  <a href="{{ url_for('index') }}">back to home</a>
+  <a href="{{ url_for('index') }}">back to index</a> <br>
+  <a href="{{ url_for('logout') }}">Log out</a>
 
 {% endblock %}

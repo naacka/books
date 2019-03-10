@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, session, render_template, request
+from flask import Flask, redirect, session, url_for, render_template, request
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -23,35 +23,46 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    users = db.execute("SELECT * FROM users").fetchall()
-    return render_template("index.html", users=users)
-
-@app.route("/signin", methods=["POST"])
-def signin():
-    users = db.execute("SELECT * FROM users").fetchall()
-    username = request.form.get("username")
-    password = request.form.get("password")
-
-    if db.execute("SELECT * FROM users WHERE username = :username AND password = :password",
-        {"username": username, "password": password}).rowcount == 0:
-        return render_template("error.html", message="Username or password is incorrect.")
+    if 'username' in session:
+        username = session['username']
+        session['logged_in'] = True
+        return render_template("index.html")
     else:
-        return render_template("signin.html")
+        return render_template("login.html")
 
-@app.route("/signup")
+@app.route("/login", methods = ["GET", "POST"])
+def login():
+    if request.method == "POST":
+        users = db.execute("SELECT * FROM users").fetchall()
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if db.execute("SELECT * FROM users WHERE username = :username AND password = :password",
+            {"username": username, "password": password}).rowcount == 0:
+            return render_template('login.html', message = "Username or password is incorrect. Please try again.")
+        else:
+            session['username'] = username
+            session['logged_in'] = True
+            return redirect(url_for("index"))
+    return render_template("login.html")
+
+@app.route("/signup", methods = ["GET", "POST"])
 def signup():
+    if request.method == "POST":
+        users = db.execute("SELECT * FROM users").fetchall()
+
+        username = request.form.get("username")
+        password = request.form.get("password")
+        if db.execute("SELECT * FROM users WHERE username = :username", {"username": username}).rowcount == 0:
+            db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", {"username": username, "password": password})
+            db.commit()
+            return redirect(url_for('index'))
+        else:
+            message = "That username already exists. Please try again"
+            return render_template("signup.html", message = message)
     return render_template("signup.html")
 
-@app.route("/thanks", methods=["POST"])
-def thanks():
-    users = db.execute("SELECT * FROM users").fetchall()
-
-    username = request.form.get("username")
-    password = request.form.get("password")
-    if db.execute("SELECT * FROM users WHERE username = :username", {"username": username}).rowcount == 0:
-        db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", {"username": username, "password": password})
-        db.commit()
-    else:
-        render_template("error.html", message="That username already exists. Please try again")
-
-    return render_template("thanks.html")
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for("login"))

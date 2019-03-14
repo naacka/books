@@ -30,6 +30,15 @@ def index():
     else:
         return render_template("login.html")
 
+@app.route("/search", methods = ["GET", "POST"])
+def search():
+    # if request.method == "POST":
+    #     req = request.form.get("req")
+    #     books = db.execute("SELECT * FROM books").fetchall()
+    #     if db.execute("SELECT * FROM books WHERE :req in (col)")
+    return render_template("search.html")
+
+
 @app.route("/login", methods = ["GET", "POST"])
 def login():
     if request.method == "POST":

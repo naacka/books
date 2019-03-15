@@ -32,10 +32,14 @@ def index():
 
 @app.route("/search", methods = ["GET", "POST"])
 def search():
-    # if request.method == "POST":
-    #     req = request.form.get("req")
-    #     books = db.execute("SELECT * FROM books").fetchall()
-    #     if db.execute("SELECT * FROM books WHERE :req in (col)")
+    if request.method == "POST":
+        req = request.form.get("req")
+        req = '%' + req + '%'
+        results = db.execute("SELECT * FROM books WHERE isbn ILIKE :req OR title ILIKE :req OR author ILIKE :req", {"req": req}).fetchall()
+        # if books is None:
+        #     return render_template('error.html', message = "result not found")
+        # result = True
+        return render_template("search.html", results = results)
     return render_template("search.html")
 
 

@@ -10,7 +10,7 @@
     <form class="" action="{{ url_for('search') }}" method="post">
       <div class="input-group my-5 mx-auto">
 
-          <input class="form-control nack" type="text"
+          <input class="form-control nack" type="text" name="req"
               placeholder="enter an isbn, title, or author"
               aria-label="enter an isbn, title, or author"
               aria-describedby="button-addon2">
@@ -22,7 +22,16 @@
 
       </div>
     </form>
+    <div class="container mx-auto">
+      {% for book in results %}
+        <h5>{{ book.title }}</h5>
+        by {{ book.author }}<br>
+        published {{ book.year }}<br>
+        isbn: {{ book.isbn }}<br><br>
+      {% endfor %}
+    </div>
   </div>
+
 
 
 {% endblock %}

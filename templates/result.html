@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    books
+{% endblock %}
+
+{% block body %}
+  <div class="container mt-5 mx-auto">
+    <h1 style="text-align: center; ">welcome to books</h1>
+    <form class="" action="{{ url_for('search') }}" method="post">
+      <div class="input-group my-5 mx-auto">
+
+          <input class="form-control nack" type="text" name="req"
+              placeholder="enter an isbn, title, or author"
+              aria-label="enter an isbn, title, or author"
+              aria-describedby="button-addon2">
+
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button"
+              id="button-addon2">Search</button>
+          </div>
+
+      </div>
+    </form>
+    <div class="container mx-auto">
+        <h5>{{ bookresult.title }}</h5>
+        by {{ bookresult.author }}<br>
+        published {{ bookresult.year }}<br>
+        isbn: {{ bookresult.isbn }}<br>
+
+        <div class="card mt-5">
+          <div class="card-body">
+            <h5 class="card-title">reviews</h5>
+            <div class="text-right">
+              <a href="#" class="card-link">write a review</a>
+            </div>
+
+            <ul class="list-group list-group-flush">
+              {% for review in reviews %}
+                <li class="list-group-item">
+                  <div class="">
+                    {{ review.username }} gave this book
+
+                    {% for i in range(1,review.stars+1) %}
+                      <i class="fas fa-star"></i>
+                    {% endfor %}
+                    {% for i in range(review.stars, 5)%}
+                      <i class="far fa-star"></i>
+                    {% endfor %}
+                  </div>
+
+
+                  {{ review.review }}</li>
+              {% endfor %}
+          </ul>
+          </div>
+        </div>
+
+
+
+
+    </div>
+  </div>
+
+
+
+{% endblock %}

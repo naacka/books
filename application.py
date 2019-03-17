@@ -42,6 +42,13 @@ def search():
         return render_template("search.html", results = results)
     return render_template("search.html")
 
+@app.route("/result/<book>")
+def result(book):
+    bookresult = db.execute("SELECT * FROM books WHERE title = :title", {"title": book}).fetchone()
+    # bookID = db.execute("SELECT id FROM books WHERE title = :title", {"title": book}).fetchone()
+    reviews = db.execute("SELECT * FROM reviews JOIN users ON users.id = reviews.user_id WHERE book_id = (SELECT id FROM books WHERE title = :title)", {"title": book}).fetchall()
+    return render_template("result.html", bookresult = bookresult, reviews = reviews)
+
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():

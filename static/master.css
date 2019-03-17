@@ -1,3 +1,25 @@
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
 #nack {
   max-width: 50%;
 }
+
+.radio-toolbar input[type="radio"] {
+  display: none;
+}
+
+.radio-toolbar > label:before {
+  content: "\f005";
+  font-family: "Font Awesome 5 Free";
+  display: inline-block;
+}
+
+.radio-toolbar > label {
+  font-weight: 400; /* Start color when not clicked */
+}
+
+.radio-toolbar > input:checked ~ label
+{ font-weight: 900; } /* Set yellow color when star checked */
+
+.radio-toolbar > input:hover ~ label
+{ font-weight: 900;  } /* Set yellow color when star hover */

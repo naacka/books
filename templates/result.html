@@ -6,7 +6,6 @@
         by {{ bookresult.author }}<br>
         published {{ bookresult.year }}<br>
         isbn: {{ bookresult.isbn }}<br>
-
         <div class="card mt-5">
           <div class="card-body">
             <h5 class="card-title">reviews</h5>
@@ -15,11 +14,14 @@
                 data-target="#collapseReview" aria-expanded="false"
                 aria-controls="collapseReview">write a review</a>
             </div>
+
+            <p class="text-center text-danger"><b>{{ message }}</b></p>
+
             <div class="collapse" id="collapseReview">
-              <form>
+              <form action="{{ url_for('result', book=bookresult.title) }}" method="post">
                 <div class="form-group">
                   <label>what did you think?</label>
-                  <div class="radio-toolbar d-flex justify-content-center flex-row-reverse">
+                  <div class="radio-toolbar d-flex justify-content-right flex-row-reverse">
                     <input type="radio" id="star5" name="rating" value="5"/><label for="star5" title="5 stars"></label>
                     <input type="radio" id="star4" name="rating" value="4"/><label for="star4" title="4 stars"></label>
                     <input type="radio" id="star3" name="rating" value="3"/><label for="star3" title="3 stars"></label>
@@ -27,7 +29,7 @@
                     <input type="radio" id="star1" name="rating" value="1"/><label for="star1" title="1 star"></label>
                   </div>
 
-                  <textarea class="form-control" name="newReview" rows="3"></textarea>
+                  <textarea class="form-control" name="review" rows="3"></textarea>
                 </div>
                 <div class="text-right">
                   <button type="submit" class="btn btn-primary mb-3">Submit</button>

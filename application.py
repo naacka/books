@@ -20,7 +20,7 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
-
+# HOME PAGE
 @app.route("/")
 def index():
     if 'username' in session:
@@ -30,6 +30,7 @@ def index():
     else:
         return render_template("login.html")
 
+# SEARCH RESULTS
 @app.route("/search", methods = ["GET", "POST"])
 def search():
     if request.method == "POST":
@@ -42,14 +43,25 @@ def search():
         return render_template("search.html", results = results)
     return render_template("search.html")
 
-@app.route("/result/<book>")
+# SEE REVIEWS FOR A SPECIFIC BOOK + LEAVE A REVIEW
+@app.route("/result/<book>", methods = ["GET", "POST"])
 def result(book):
     bookresult = db.execute("SELECT * FROM books WHERE title = :title", {"title": book}).fetchone()
-    # bookID = db.execute("SELECT id FROM books WHERE title = :title", {"title": book}).fetchone()
     reviews = db.execute("SELECT * FROM reviews JOIN users ON users.id = reviews.user_id WHERE book_id = (SELECT id FROM books WHERE title = :title)", {"title": book}).fetchall()
+
+    if request.method == "POST":
+        if db.execute("SELECT * FROM reviews JOIN users ON users.id = reviews.user_id WHERE book_id = (SELECT id FROM books WHERE title = :title) AND username = :username", {"title": book, "username": session['username']}).rowcount == 0:
+            starrating = int(request.form.get("rating"))
+            review = request.form.get("review")
+            user_id = db.execute("SELECT id FROM users WHERE username = :username", {"username": session['username']}).fetchone()
+            db.execute("INSERT INTO reviews (book_id, user_id, stars, review) VALUES (:book_id, :user_id, :stars, :review)", {"book_id": bookresult.id, "user_id": user_id.id, "stars": starrating, "review": review})
+            db.commit()
+            return redirect(url_for("result", book=bookresult.title))
+        else:
+            return render_template("result.html", bookresult = bookresult, reviews = reviews, message = "You can only leave one review per book.")
     return render_template("result.html", bookresult = bookresult, reviews = reviews)
 
-
+# LOG IN
 @app.route("/login", methods = ["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -66,6 +78,7 @@ def login():
             return redirect(url_for("index"))
     return render_template("login.html")
 
+# SIGN UP
 @app.route("/signup", methods = ["GET", "POST"])
 def signup():
     if request.method == "POST":
@@ -82,6 +95,7 @@ def signup():
             return render_template("signup.html", message = message)
     return render_template("signup.html")
 
+# LOG OUT
 @app.route('/logout')
 def logout():
     session.pop('username', None)

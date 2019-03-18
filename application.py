@@ -1,4 +1,4 @@
-import os
+import os, requests, json
 
 from flask import Flask, redirect, session, url_for, render_template, request
 from flask_session import Session
@@ -48,6 +48,10 @@ def search():
 def result(book):
     bookresult = db.execute("SELECT * FROM books WHERE title = :title", {"title": book}).fetchone()
     reviews = db.execute("SELECT * FROM reviews JOIN users ON users.id = reviews.user_id WHERE book_id = (SELECT id FROM books WHERE title = :title)", {"title": book}).fetchall()
+    res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "NTSuRAhJUNpxNRWYTPSVTA", "isbns": bookresult.isbn})
+    data = res.json()()
+    greadsreviews = data["books"][0]["work_reviews_count"]
+    greadsrating = data["books"][0]["average_rating"]
 
     if request.method == "POST":
         if db.execute("SELECT * FROM reviews JOIN users ON users.id = reviews.user_id WHERE book_id = (SELECT id FROM books WHERE title = :title) AND username = :username", {"title": book, "username": session['username']}).rowcount == 0:
@@ -58,8 +62,8 @@ def result(book):
             db.commit()
             return redirect(url_for("result", book=bookresult.title))
         else:
-            return render_template("result.html", bookresult = bookresult, reviews = reviews, message = "You can only leave one review per book.")
-    return render_template("result.html", bookresult = bookresult, reviews = reviews)
+            return render_template("result.html", bookresult = bookresult, reviews = reviews, greadsreviews = greadsreviews, greadsrating = greadsrating, message = "You can only leave one review per book.")
+    return render_template("result.html", bookresult = bookresult, reviews = reviews, greadsreviews = greadsreviews, greadsrating = greadsrating)
 
 # LOG IN
 @app.route("/login", methods = ["GET", "POST"])

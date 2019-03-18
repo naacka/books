@@ -1,0 +1,6 @@
+- User profiles
+  - My profile
+    - view all REVIEWS
+    - delete REVIEWS
+  - Other users
+    - view REVIEWS

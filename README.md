@@ -10,7 +10,7 @@ The HTML is mostly Jinja2 and the CSS is mostly Bootstrap.<br>
 Using Books, you can:
 <li>create a user profile</li>
 <li>search for your favorite books and authors</li>
-<li>see information for books like title, author, year published, isbn, average Goodreads rating, and number of ratings on Goodreads</li> 
+<li>see information for books like title, author, year published, isbn, average Goodreads rating, & number of ratings on Goodreads</li> 
 <li>leave a review out of 5 stars as well as a written review</li>
 <li>view reviews left for a book by other users</li>
 <li>see all of the reviews left by a specific user</li>

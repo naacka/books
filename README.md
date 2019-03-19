@@ -7,7 +7,7 @@ It was built with Python using Flask and PostgreSQL.<br>
 It uses the Goodreads API to get information on the average rating for a book and the total number of ratings left for a book. <br>
 The HTML is mostly Jinja2 and the CSS is mostly Bootstrap.<br>
 
-<uL>Using Books, you can:
+Using Books, you can:
 <li>create a user profile</li>
 <li>search for your favorite books and authors</li>
 <li>see information the following information for books: 
@@ -16,5 +16,5 @@ The HTML is mostly Jinja2 and the CSS is mostly Bootstrap.<br>
 <li>view reviews left for a book by other users</li>
 <li>see all of the reviews left by a specific user</li>
 <li>see all of the reviews you've left via your profile</li>
-<li>delete reviews you've left </li></ul>
+<li>delete reviews you've left </li>
    

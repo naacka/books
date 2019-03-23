@@ -22,4 +22,4 @@
 { font-weight: 900; } /* Set yellow color when star checked */
 
 .radio-toolbar > input:hover ~ label
-{ font-weight: 900;  } /* Set yellow color when star hover */
+{ font-weight: 900;  } /* Set yellow color when star hover

@@ -1,6 +1,2 @@
-- User profiles
-  - My profile
-    - view all REVIEWS
-    - delete REVIEWS
-  - Other users
-    - view REVIEWS
+- delete REVIEWS
+  - make the modal work (might need to add some javascript)

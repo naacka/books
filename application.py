@@ -49,7 +49,7 @@ def result(book):
     bookresult = db.execute("SELECT * FROM books WHERE title = :title", {"title": book}).fetchone()
     reviews = db.execute("SELECT * FROM reviews JOIN users ON users.id = reviews.user_id WHERE book_id = (SELECT id FROM books WHERE title = :title)", {"title": book}).fetchall()
     res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": "NTSuRAhJUNpxNRWYTPSVTA", "isbns": bookresult.isbn})
-    data = res.json()()
+    data = res.json()
     greadsreviews = data["books"][0]["work_reviews_count"]
     greadsrating = data["books"][0]["average_rating"]
 
@@ -60,10 +60,23 @@ def result(book):
             user_id = db.execute("SELECT id FROM users WHERE username = :username", {"username": session['username']}).fetchone()
             db.execute("INSERT INTO reviews (book_id, user_id, stars, review) VALUES (:book_id, :user_id, :stars, :review)", {"book_id": bookresult.id, "user_id": user_id.id, "stars": starrating, "review": review})
             db.commit()
-            return redirect(url_for("result", book=bookresult.title))
+            return redirect(url_for("result", book = bookresult.title))
         else:
             return render_template("result.html", bookresult = bookresult, reviews = reviews, greadsreviews = greadsreviews, greadsrating = greadsrating, message = "You can only leave one review per book.")
     return render_template("result.html", bookresult = bookresult, reviews = reviews, greadsreviews = greadsreviews, greadsrating = greadsrating)
+
+# VIEW USER PROFILE
+@app.route("/profile/<user>", methods = ["GET", "POST"])
+def profile(user):
+    reviews = db.execute("SELECT * FROM reviews JOIN books ON books.id = reviews.book_id WHERE user_id = (SELECT id FROM users WHERE username = :username)", {"username": user}).fetchall()
+
+    if request.method == "POST":
+        booktodelete = request.form("delete")
+        db.execute("DELETE * FROM reviews WHERE book_id = booktodelete AND user_id = (SELECT id FROM users WHERE username = :username)", {"username": user})
+        db.commit()
+        return redirect(url_for("profile", user = user, reviews = reviews))
+    return render_template("profile.html", user = user, reviews = reviews)
+
 
 # LOG IN
 @app.route("/login", methods = ["GET", "POST"])

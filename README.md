@@ -1,6 +1,6 @@
-# Project 1
+# Books
 
-Web Programming with Python and JavaScript
+Project1 from CS50's Web Programming with Python and JavaScript
 
 Books is a website where you can leave reviews for books you've read.<br><br>
 It was built with Python using Flask and PostgreSQL.<br>

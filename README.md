@@ -18,5 +18,5 @@ Using Books, you can:
 <li>see all of the reviews you've left via your profile</li>
 <li>delete reviews you've left (coming soon)</li></ul><br>
 
-<a href="https://nack-project1.herokuapp.com/">See the website here</a>
+<a href="https://nack-books.herokuapp.com/">See the website here</a>
    
